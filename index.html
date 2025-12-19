@@ -140,9 +140,9 @@
       #done {
         display: none;
         text-align: center;
-        color: #34c759;
+        color: rgba(0, 0, 0, 0.6);
         padding: 20px;
-        background: rgba(52, 199, 89, 0.1);
+        background: rgba(0, 0, 0, 0.05);
         border-radius: 12px;
         margin-top: 20px;
         font-size: 15px;
@@ -169,6 +169,15 @@
             id="password"
             type="password"
             placeholder="새 비밀번호를 입력하세요"
+            minlength="6"
+          />
+        </div>
+        <div class="input-container">
+          <label class="label" for="confirmPassword">비밀번호 확인</label>
+          <input
+            id="confirmPassword"
+            type="password"
+            placeholder="비밀번호를 다시 입력하세요"
             minlength="6"
           />
         </div>
@@ -205,9 +214,11 @@
         }
 
         const passwordInput = document.getElementById("password");
+        const confirmPasswordInput = document.getElementById("confirmPassword");
         const errorDiv = document.getElementById("error");
         const submitBtn = document.getElementById("submitBtn");
         const password = passwordInput.value.trim();
+        const confirmPassword = confirmPasswordInput.value.trim();
 
         // 유효성 검사
         if (!password) {
@@ -218,6 +229,18 @@
 
         if (password.length < 6) {
           errorDiv.textContent = "비밀번호는 최소 6자 이상이어야 합니다.";
+          errorDiv.style.display = "block";
+          return;
+        }
+
+        if (!confirmPassword) {
+          errorDiv.textContent = "비밀번호 확인을 입력해주세요.";
+          errorDiv.style.display = "block";
+          return;
+        }
+
+        if (password !== confirmPassword) {
+          errorDiv.textContent = "비밀번호가 일치하지 않습니다.";
           errorDiv.style.display = "block";
           return;
         }
@@ -289,6 +312,14 @@
             // Enter 키로도 제출 가능
             document
               .getElementById("password")
+              .addEventListener("keypress", (e) => {
+                if (e.key === "Enter") {
+                  updatePassword();
+                }
+              });
+
+            document
+              .getElementById("confirmPassword")
               .addEventListener("keypress", (e) => {
                 if (e.key === "Enter") {
                   updatePassword();
